@@ -79,9 +79,17 @@ protected:
 
     virtual void SetCurrentTarget(class ABaseEnemy* enemy);
 
+    void SpawnNewTargetMarker();
+
 protected:
     const float kMaxTargetRange = 20000.f;
 
     class ABaseEnemy* _currentTarget;
+
+    class ATargetMarker* _targetMarker;
+
+    // Blueprints
+private:
+    UClass* _bpTargetMarker;
 };
 

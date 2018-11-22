@@ -11,6 +11,8 @@
 #include "Enemies/BaseEnemy.h"
 #include "EngineUtils.h"
 #include "CombatClasses/CombatClassUtils.h"
+#include "Combat/TargetMarker.h"
+#include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AProjectEpsilonCharacter
@@ -48,6 +50,13 @@ AProjectEpsilonCharacter::AProjectEpsilonCharacter()
 
     // Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
     // are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+    // Luke from here
+    static ConstructorHelpers::FObjectFinder<UClass> targetBlueprint(TEXT("Class'/Game/Blueprints/Combat/TargetMarker.TargetMarker_C'"));
+    if (targetBlueprint.Object)
+    {
+        _bpTargetMarker = targetBlueprint.Object;
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -189,9 +198,34 @@ void AProjectEpsilonCharacter::SetCurrentTarget(ABaseEnemy* enemy)
     if (enemy)
     {
         _currentTarget = enemy;
+        if (_bpTargetMarker)
+        {
+            if (!_targetMarker)
+            {
+                SpawnNewTargetMarker();
+            }
+            _targetMarker->SetTarget(_currentTarget);
+        }
     }
     else
     {
         _currentTarget = nullptr;
+    }
+
+    if (_currentTarget == nullptr && _targetMarker)
+    {
+        _targetMarker->Destroy();
+        _targetMarker = nullptr;
+    }
+}
+
+void AProjectEpsilonCharacter::SpawnNewTargetMarker()
+{
+    if (_bpTargetMarker)
+    {
+        FVector location (0.0f, 0.0f, 0.0f);
+        FRotator rotation (0.0f, 0.0f, 0.0f);
+        FActorSpawnParameters spawnInfo;
+        _targetMarker = GetWorld()->SpawnActor<ATargetMarker>(_bpTargetMarker, location, rotation, spawnInfo);
     }
 }
