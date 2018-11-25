@@ -71,14 +71,13 @@ public:
 
     // Luke from here
 protected:
-    virtual void Tick(float DeltaSeconds) override;
+    void Tick(float DeltaSeconds) override;
 
-    virtual void LockOnTargetToggle();
-
-    virtual void TargetClosestEnemy();
-
-    virtual void SetCurrentTarget(class ABaseEnemy* enemy);
-
+    //Targeting
+    void LockOnTargetToggle();
+    void TargetNewEnemy();
+    void CleanTargetHistory(bool forceClearAll = false);
+    void SetCurrentTarget(class ABaseEnemy* enemy);
     void SpawnNewTargetMarker();
 
 protected:
@@ -87,6 +86,7 @@ protected:
     class ABaseEnemy* _currentTarget;
 
     class ATargetMarker* _targetMarker;
+    TArray<TWeakObjectPtr<class ABaseEnemy>> _targetHistory;
 
     // Blueprints
 private:

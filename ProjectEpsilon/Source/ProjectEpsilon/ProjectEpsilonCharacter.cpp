@@ -163,23 +163,18 @@ void AProjectEpsilonCharacter::Tick(float DeltaSeconds)
 
 void AProjectEpsilonCharacter::LockOnTargetToggle()
 {
-    if (_currentTarget)
-    {
-        SetCurrentTarget(nullptr);
-    }
-    else
-    {
-        TargetClosestEnemy();
-    }
+    TargetNewEnemy();
 }
 
-void AProjectEpsilonCharacter::TargetClosestEnemy()
+void AProjectEpsilonCharacter::TargetNewEnemy()
 {
+    CleanTargetHistory();
+
     ABaseEnemy* closestEnemy = nullptr;
+    float shortestDistance = kMaxTargetRange;
     for (TActorIterator<ABaseEnemy> actorItr(GetWorld()); actorItr; ++actorItr)
     {
-        float shortestDistance = kMaxTargetRange;
-        if (*actorItr)
+        if (*actorItr && !(_targetHistory.Num() > 0 && _targetHistory.Contains(*actorItr)))
         {
             float distanceToEnemy = GetDistanceTo(*actorItr);
             if (distanceToEnemy < shortestDistance)
@@ -190,7 +185,28 @@ void AProjectEpsilonCharacter::TargetClosestEnemy()
         }
     }
 
-    SetCurrentTarget(closestEnemy);
+    if (closestEnemy != nullptr || _currentTarget != nullptr)
+    {
+        SetCurrentTarget(closestEnemy);
+    }
+}
+
+void AProjectEpsilonCharacter::CleanTargetHistory(bool forceClearAll)
+{
+    if (forceClearAll)
+    {
+        _targetHistory.Empty();
+    }
+    else if (_targetHistory.Num() > 0)
+    {
+        for (int i = _targetHistory.Num() - 1; i >= 0; --i)
+        {
+            if (!_targetHistory[i].IsValid())
+            {
+                _targetHistory.RemoveAt(i);
+            }
+        }
+    }
 }
 
 void AProjectEpsilonCharacter::SetCurrentTarget(ABaseEnemy* enemy)
@@ -198,6 +214,7 @@ void AProjectEpsilonCharacter::SetCurrentTarget(ABaseEnemy* enemy)
     if (enemy)
     {
         _currentTarget = enemy;
+        _targetHistory.Add(enemy);
         if (_bpTargetMarker)
         {
             if (!_targetMarker)
@@ -216,6 +233,7 @@ void AProjectEpsilonCharacter::SetCurrentTarget(ABaseEnemy* enemy)
     {
         _targetMarker->Destroy();
         _targetMarker = nullptr;
+        CleanTargetHistory(true);
     }
 }
 
