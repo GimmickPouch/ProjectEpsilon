@@ -75,16 +75,13 @@ protected:
 
     virtual void Tick(float DeltaSeconds) override;
 
+    // Attacking
     void PrimaryAttack();
     void EndPrimaryAttackCombo();
 
     void SecondarySkills();
 
-    void LockOnTargetToggle();
-    void TargetClosestEnemy();
-    void SetCurrentTarget(class ABaseEnemy* enemy);
-
-    //Targeting
+    // Targeting
     void LockOnTargetToggle();
     void TargetNewEnemy();
     void CleanTargetHistory(bool forceClearAll = false);
