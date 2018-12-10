@@ -84,6 +84,11 @@ protected:
     void TargetClosestEnemy();
     void SetCurrentTarget(class ABaseEnemy* enemy);
 
+    //Targeting
+    void LockOnTargetToggle();
+    void TargetNewEnemy();
+    void CleanTargetHistory(bool forceClearAll = false);
+    void SetCurrentTarget(class ABaseEnemy* enemy);
     void SpawnNewTargetMarker();
 
 protected:
@@ -92,6 +97,7 @@ protected:
     class ABaseEnemy* _currentTarget;
 
     class ATargetMarker* _targetMarker;
+    TArray<TWeakObjectPtr<class ABaseEnemy>> _targetHistory;
 
     // Attacking
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
