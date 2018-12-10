@@ -13,6 +13,7 @@
 #include "CombatClasses/CombatClassUtils.h"
 #include "Combat/TargetMarker.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
+#include "TimerManager.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AProjectEpsilonCharacter
@@ -88,6 +89,9 @@ void AProjectEpsilonCharacter::SetupPlayerInputComponent(class UInputComponent* 
     PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AProjectEpsilonCharacter::OnResetVR);
 
     // Luke additions
+    PlayerInputComponent->BindAction("PrimaryFire", IE_Pressed, this, &AProjectEpsilonCharacter::PrimaryAttack);
+    PlayerInputComponent->BindAction("SecondaryFire", IE_Pressed, this, &AProjectEpsilonCharacter::SecondarySkills);
+
     PlayerInputComponent->BindAction("LockOn", IE_Pressed, this, &AProjectEpsilonCharacter::LockOnTargetToggle);
 }
 
@@ -149,6 +153,12 @@ void AProjectEpsilonCharacter::MoveRight(float Value)
 }
 
 // Luke from here
+void AProjectEpsilonCharacter::BeginPlay()
+{
+    Super::BeginPlay();
+
+    _canAttack = true;
+}
 
 void AProjectEpsilonCharacter::Tick(float DeltaSeconds)
 {
@@ -161,6 +171,31 @@ void AProjectEpsilonCharacter::Tick(float DeltaSeconds)
     }
 }
 
+// Attacks
+void AProjectEpsilonCharacter::PrimaryAttack()
+{
+    if (_canAttack && _primaryAttackAnimation)
+    {
+        PlayAnimMontage(_primaryAttackAnimation);
+
+        _canAttack = false;
+
+        FTimerHandle attackCooldownTimerHandle;
+        GetWorldTimerManager().SetTimer(attackCooldownTimerHandle, this, &AProjectEpsilonCharacter::EndPrimaryAttackCombo, 0.5f);
+    }
+}
+
+void AProjectEpsilonCharacter::EndPrimaryAttackCombo()
+{
+    _canAttack = true;
+}
+
+void AProjectEpsilonCharacter::SecondarySkills()
+{
+
+}
+
+// Lock On
 void AProjectEpsilonCharacter::LockOnTargetToggle()
 {
     if (_currentTarget)

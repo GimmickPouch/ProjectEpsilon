@@ -71,13 +71,18 @@ public:
 
     // Luke from here
 protected:
+    virtual void BeginPlay() override;
+
     virtual void Tick(float DeltaSeconds) override;
 
-    virtual void LockOnTargetToggle();
+    void PrimaryAttack();
+    void EndPrimaryAttackCombo();
 
-    virtual void TargetClosestEnemy();
+    void SecondarySkills();
 
-    virtual void SetCurrentTarget(class ABaseEnemy* enemy);
+    void LockOnTargetToggle();
+    void TargetClosestEnemy();
+    void SetCurrentTarget(class ABaseEnemy* enemy);
 
     void SpawnNewTargetMarker();
 
@@ -87,6 +92,12 @@ protected:
     class ABaseEnemy* _currentTarget;
 
     class ATargetMarker* _targetMarker;
+
+    // Attacking
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
+    class UAnimMontage* _primaryAttackAnimation;
+
+    bool _canAttack;
 
     // Blueprints
 private:
