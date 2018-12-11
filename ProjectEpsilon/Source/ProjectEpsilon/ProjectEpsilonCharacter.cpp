@@ -14,6 +14,7 @@
 #include "Combat/TargetMarker.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "TimerManager.h"
+#include "CombatClasses/BaseCombatClass.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AProjectEpsilonCharacter
@@ -157,6 +158,7 @@ void AProjectEpsilonCharacter::BeginPlay()
 {
     Super::BeginPlay();
 
+    _currentClass = EClassType::CC_MeleeSword;
     _canAttack = true;
 }
 
@@ -192,6 +194,7 @@ void AProjectEpsilonCharacter::EndPrimaryAttackCombo()
 
 void AProjectEpsilonCharacter::SecondarySkills()
 {
+    // TODO check analogue stick direction? Then what do we do for PC?
 
 }
 

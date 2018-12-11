@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Enums/CharacterEnums.h"
 #include "ProjectEpsilonCharacter.generated.h"
 
 UCLASS(config=Game)
@@ -89,18 +90,22 @@ protected:
     void SpawnNewTargetMarker();
 
 protected:
+    // Character Class
+    EClassType _currentClass;
+
+    // Attacking
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Animations)
+    class UAnimMontage* _primaryAttackAnimation;
+
+    bool _canAttack;
+
+    // Targeting
     const float kMaxTargetRange = 20000.f;
 
     class ABaseEnemy* _currentTarget;
 
     class ATargetMarker* _targetMarker;
     TArray<TWeakObjectPtr<class ABaseEnemy>> _targetHistory;
-
-    // Attacking
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
-    class UAnimMontage* _primaryAttackAnimation;
-
-    bool _canAttack;
 
     // Blueprints
 private:
