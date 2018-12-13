@@ -94,10 +94,12 @@ protected:
     EClassType _currentClass;
 
     // Attacking
+    bool _canAttack;
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Animations)
     class UAnimMontage* _primaryAttackAnimation;
 
-    bool _canAttack;
+    class UBaseSkill* _primarySkill;
 
     // Targeting
     const float kMaxTargetRange = 20000.f;

@@ -9,6 +9,9 @@ ASkillEffectZone::ASkillEffectZone()
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
 
+    RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+    _zoneMarker = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ZoneMarker"));
+    _zoneMarker->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned

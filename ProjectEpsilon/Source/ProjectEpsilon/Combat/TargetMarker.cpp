@@ -9,7 +9,7 @@ ATargetMarker::ATargetMarker()
     PrimaryActorTick.bCanEverTick = true;
 
     RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-    _targetMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EnemyBody"));
+    _targetMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TargetMarker"));
     _targetMesh->SetupAttachment(RootComponent);
 }
 

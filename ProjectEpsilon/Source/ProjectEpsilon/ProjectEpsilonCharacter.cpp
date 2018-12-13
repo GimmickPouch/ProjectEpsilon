@@ -15,6 +15,7 @@
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "TimerManager.h"
 #include "CombatClasses/BaseCombatClass.h"
+#include "Combat/Skills/BaseSkill.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AProjectEpsilonCharacter
@@ -160,6 +161,9 @@ void AProjectEpsilonCharacter::BeginPlay()
 
     _currentClass = EClassType::CC_MeleeSword;
     _canAttack = true;
+
+    _primarySkill = NewObject<UBaseSkill>();
+    _primarySkill->SetDamage(0.5f);
 }
 
 void AProjectEpsilonCharacter::Tick(float DeltaSeconds)
